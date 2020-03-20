@@ -4,7 +4,11 @@ function eval() {
 }
 
 const operators = {
-    '/': function(a,b) {return a/b},
+    '/': function(a,b) {
+      if (b == 0) {
+        throw new TypeError("TypeError: Division by zero.");
+      }
+      return a/b},
     '*': function(a,b) {return a*b},
     '-': function(a,b) {return a-b},
     '+': function(a,b) {return a+b},
@@ -13,11 +17,15 @@ const operators = {
 const signs = ['/', '*', '-', '+']
 
 function expressionCalculator(expr) {
-    expr = expr.replace(/\s/g,'')
-    expr = expr.replace('+',' + ');
-    expr = expr.replace('-',' - ');
-    expr = expr.replace('/',' / ');
-    let exprArray = expr.replace('*',' * ').trim().split(' ');
+    expr = expr.split(' ').join('')
+    console.log(expr);
+    expr = expr.split('+').join(' + ')
+    console.log(expr);
+    expr = expr.split('-').join(' - ')
+    console.log(expr);
+    expr = expr.split('*').join(' * ')
+    console.log(expr);
+    let exprArray = expr.split('/').join(' / ').split(' ');
     console.log(exprArray);
     for (let index = 0; index < 4; ) {
         let sign = exprArray.indexOf(signs[index]);
