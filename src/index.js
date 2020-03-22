@@ -87,12 +87,10 @@ function expressionCalculator(expr) {
       exprArray.splice(startPosition, innerLength + 1);
       exprArray[startPosition - 1] = result.toString();
       console.log(exprArray);
-      
-      if(exprArray.indexOf(')' === -1)){
+      if(exprArray.indexOf(')') === -1){
         return calculate(exprArray);
       }
-      console.log(next);
-      
+      console.log('next');
     }
   } else {
     for (let index = 0; index < 4;) {
