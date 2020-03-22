@@ -1,18 +1,25 @@
 function eval() {
-    // Do not use eval!!!
-    return;
+  // Do not use eval!!!
+  return;
 }
 const signs = ['/', '*', '-', '+'];
 
 const operators = {
-    '/': function(a,b) {
-      if (b == 0) {
-        throw new TypeError("TypeError: Division by zero.");
-      }
-      return a/b},
-    '*': function(a,b) {return a*b},
-    '-': function(a,b) {return a-b},
-    '+': function(a,b) {return a+b},
+  '/': function (a, b) {
+    if (b == 0) {
+      throw new TypeError("TypeError: Division by zero.");
+    }
+    return a / b
+  },
+  '*': function (a, b) {
+    return a * b
+  },
+  '-': function (a, b) {
+    return a - b
+  },
+  '+': function (a, b) {
+    return a + b
+  },
 }
 
 const formatExpression = (expr) => {
@@ -23,54 +30,83 @@ const formatExpression = (expr) => {
   expr = expr.split('(').join(' ( ');
   expr = expr.split(')').join(' ) ');
   expr = expr.split('/').join(' / ');
-  return expr;
+  expr = expr.split('  ').join(' ');
+  return expr.trim();
 }
 
-const pairedBrackets = (expr) => {  
+const pairedBrackets = (expr) => {
   let count = 0;
   let prevElement = '';
   let exprArray = formatExpression(expr).split(' ');
   exprArray.forEach(element => {
-    if (element === '('){
+    if (element === '(') {
       prevElement = '(';
       count += 1;
-    }else{
-      if (element === ")"){
-        count -=1;
+    } else {
+      if (element === ")") {
+        count -= 1;
       }
     }
   })
-  if (count !== 0 ){
+  if (count !== 0) {
     throw new Error('ExpressionError: Brackets must be paired');
   }
 }
 
-function calc(exprArray){
-  const endBracket = exprArray.indexOf(')');
-  for (let index = endBracket - 1; index > 0; index--) {
-    if(exprArray[index] === '(') {return index};
+function calculate(exprArray) {
+  for (let index = 0; index < 4;) {
+    let sign = exprArray.indexOf(signs[index]);
+    if (sign > 0) {
+      exprArray[sign - 1] = operators[exprArray[sign]](+exprArray[sign - 1], +exprArray[sign + 1]);
+      exprArray.splice(sign, 2);
+    } else {
+      index += 1;
+    }
   }
+  return exprArray[0]
 }
 
-
+function bracketsCheck(exprArray) {
+  let endPosition = exprArray.indexOf(')');
+  let startPosition = exprArray.slice(0, endPosition).lastIndexOf('(') + 1;
+  return [startPosition, endPosition];
+}
 
 function expressionCalculator(expr) {
   pairedBrackets(expr);
-  
   let exprArray = formatExpression(expr).split(' ');
-    for (let index = 0; index < 4; ) {
-        let sign = exprArray.indexOf(signs[index]);
-        if(sign > 0){
-            exprArray[sign - 1] = operators[exprArray[sign]](+exprArray[sign-1], +exprArray[sign+1]);
-            exprArray.splice(sign, 2);
-        }else{
-            index += 1;
-        }
+ 
+  if (exprArray.indexOf(')') > -1) {
+    while (exprArray.indexOf(')' > -1)) {
+      let [startPosition, endPosition] = bracketsCheck(exprArray);
+      console.log([startPosition, endPosition]);
+      let innerArray = exprArray.slice(startPosition, endPosition);
+      let innerLength = innerArray.length;
+      let result = calculate(innerArray);
+      console.log(result);      
+      exprArray.splice(startPosition, innerLength + 1);
+      exprArray[startPosition - 1] = result.toString();
+      console.log(exprArray);
+      
+      if(exprArray.indexOf(')' === -1)){
+        return calculate(exprArray);
+      }
+      console.log(next);
+      
+    }
+  } else {
+    for (let index = 0; index < 4;) {
+      let sign = exprArray.indexOf(signs[index]);
+      if (sign > 0) {
+        exprArray[sign - 1] = operators[exprArray[sign]](+exprArray[sign - 1], +exprArray[sign + 1]);
+        exprArray.splice(sign, 2);
+      } else {
+        index += 1;
+      }
     }
     return exprArray[0]
+  }
 }
-
-
 module.exports = {
-    expressionCalculator
+  expressionCalculator
 }
