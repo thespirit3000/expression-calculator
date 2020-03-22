@@ -75,7 +75,6 @@ function bracketsCheck(exprArray) {
 function expressionCalculator(expr) {
   pairedBrackets(expr);
   let exprArray = formatExpression(expr).split(' ');
-
   if (exprArray.indexOf(')') > -1) {
     while (exprArray.indexOf(')' > -1)) {
       let [startPosition, endPosition] = bracketsCheck(exprArray);
