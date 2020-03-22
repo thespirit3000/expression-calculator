@@ -75,22 +75,18 @@ function bracketsCheck(exprArray) {
 function expressionCalculator(expr) {
   pairedBrackets(expr);
   let exprArray = formatExpression(expr).split(' ');
- 
+
   if (exprArray.indexOf(')') > -1) {
     while (exprArray.indexOf(')' > -1)) {
       let [startPosition, endPosition] = bracketsCheck(exprArray);
-      console.log([startPosition, endPosition]);
       let innerArray = exprArray.slice(startPosition, endPosition);
       let innerLength = innerArray.length;
       let result = calculate(innerArray);
-      console.log(result);      
       exprArray.splice(startPosition, innerLength + 1);
       exprArray[startPosition - 1] = result.toString();
-      console.log(exprArray);
-      if(exprArray.indexOf(')') === -1){
+      if (exprArray.indexOf(')') === -1) {
         return calculate(exprArray);
       }
-      console.log('next');
     }
   } else {
     for (let index = 0; index < 4;) {
